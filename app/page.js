@@ -98,19 +98,30 @@ export default function Home(){
       </Modal>
       <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
       <Box border='1px solid #333'>
-        <Box width='800px' height='100px' bgcolor='ADD8E6' display='flex' justifyConcent='center' alignItems='center'>
+        <Box
+            width='800px'
+            height='100px'
+            bgcolor='#ADD8E6'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+        >
           <Typography variant='h2' color='#333'>Inventory Items</Typography>
         </Box>
-      </Box>
-      <Stack width='800px' height='800px' spacing={2} overflow='auto'>
-        {
-          inventory.map(({name,quantity})=>{
-            <Box key={name} width='100%' minHeight='150px' display='flex' alignItems='center' justifyContent='center' bgColor='#f0f0f0' padding={5}>
-              <Typography>{name}</Typography>
+        <Stack width='800px' height='300px' spacing={2} overflow='auto'>
+          {inventory.map(({name,quantity})=>(
+            <Box key={name} width='100%' minHeight='150px' display='flex' alignItems='center' justifyContent='space-between' bgcolor='#f0f0f0' padding={5}>
+              <Typography variant='h3' color='#333' textAlign='center'>
+                {name.charAt(0).toUpperCase()+name.slice(1)}
+              </Typography>
+              <Typography variant='h3' color='#333' textAlign='center'>
+                {quantity}
+              </Typography>
+              <Button variant='contained' onClick={()=>{removeItem(name)}}>Remove</Button>
             </Box>
-          })
-        }
-      </Stack>
+          ))}
+        </Stack>
+      </Box>
     </Box>
   );
 }
