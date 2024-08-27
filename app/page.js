@@ -3,7 +3,7 @@ import Image from 'next/image';
 import {useState,useEffect} from 'react';
 import {firestore} from '@/firebase';
 import {Box,Modal,Stack,TextField,Button,Typography} from '@mui/material';
-import {collection,getDocs,query} from 'firebase/firestore';
+import {collection,getDocs,query,getDoc,doc,deleteDoc,setDoc} from 'firebase/firestore';
 
 export default function Home(){
   const [inventory,setinventory]=useState([]);
@@ -86,7 +86,7 @@ export default function Home(){
             <Button
                 variant='outlined'
                 onClick={()=>{
-                  additem(itemname);
+                  addItem(itemname);
                   setitemname('');
                   handleclose();
                 }}
