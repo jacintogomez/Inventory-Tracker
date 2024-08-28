@@ -8,7 +8,8 @@ import {collection,getDocs,query,getDoc,doc,deleteDoc,setDoc} from 'firebase/fir
 export default function Home(){
   const [inventory,setinventory]=useState([]);
   const [open,setopen]=useState(false);
-  const [itemname,setitemname]=useState([]);
+  const [itemname,setitemname]=useState('');
+  const [schquery,setschquery]=useState('');
 
   const updateInventory=async()=>{
     const snapshot=query(collection(firestore,'pantry'));
@@ -49,6 +50,7 @@ export default function Home(){
   useEffect(()=>{updateInventory()},[])
   const handleopen=()=>setopen(true);
   const handleclose=()=>setopen(false);
+  const filteredinventory=inventory.filter(({name})=>name.toLowerCase().includes(schquery.toLowerCase()));
 
   return (
     <Box
@@ -98,18 +100,18 @@ export default function Home(){
       </Modal>
       <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
       <Box border='1px solid #333'>
-        <Box
-            width='800px'
-            height='100px'
-            bgcolor='#ADD8E6'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-        >
+        <Box width='800px' height='100px' bgcolor='#ADD8E6' display='flex' justifyContent='space-around' alignItems='center'>
           <Typography variant='h2' color='#333'>Inventory Items</Typography>
+          <TextField
+              id='outlined-basic'
+              label='Search'
+              variant='outlined'
+              value={schquery}
+              onChange={(e)=>setschquery(e.target.value)}
+          />
         </Box>
         <Stack width='800px' height='300px' spacing={2} overflow='auto'>
-          {inventory.map(({name,quantity})=>(
+          {filteredinventory.map(({name,quantity})=>(
             <Box key={name} width='100%' minHeight='150px' display='flex' alignItems='center' justifyContent='space-between' bgcolor='#f0f0f0' padding={5}>
               <Typography variant='h3' color='#333' textAlign='center'>
                 {name.charAt(0).toUpperCase()+name.slice(1)}
