@@ -99,8 +99,8 @@ export default function Home(){
         </Box>
       </Modal>
       <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
-      <Box border='1px solid #333'>
-        <Box width='800px' height='100px' bgcolor='#ADD8E6' display='flex' justifyContent='space-around' alignItems='center'>
+      <Box border='1px solid #333' borderRadius='10px'>
+        <Box width='800px' height='100px' bgcolor='#ADD8E6' display='flex' justifyContent='space-around' alignItems='center' borderRadius='10px'>
           <Typography variant='h2' color='#333'>Inventory Items</Typography>
           <TextField
               id='outlined-basic'
