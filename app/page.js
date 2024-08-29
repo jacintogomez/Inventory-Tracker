@@ -3,12 +3,14 @@ import {useState,useEffect} from 'react';
 import {firestore} from '@/firebase';
 import {Box,Modal,Stack,TextField,Button,Typography} from '@mui/material';
 import {collection,getDocs,query,getDoc,doc,deleteDoc,setDoc} from 'firebase/firestore';
+import {useRouter} from 'next/navigation';
 
 export default function Home(){
   const [inventory,setinventory]=useState([]);
   const [open,setopen]=useState(false);
   const [itemname,setitemname]=useState('');
   const [schquery,setschquery]=useState('');
+  const router=useRouter();
 
   const updateInventory=async()=>{
     const snapshot=query(collection(firestore,'pantry'));
@@ -97,7 +99,10 @@ export default function Home(){
           </Stack>
         </Box>
       </Modal>
-      <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
+      <Box width='100%' display='flex' justifyContent='space-around' alignItems='center'>
+        <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
+        <Button variant='contained' onClick={()=>router.push('/inventory')}>Full Inventory List</Button>
+      </Box>
       <Box border='1px solid #333' borderRadius='10px'>
         <Box width='800px' height='100px' bgcolor='#ADD8E6' display='flex' justifyContent='space-around' alignItems='center' borderRadius='10px'>
           <Typography variant='h2' color='#333'>Inventory Items</Typography>
@@ -109,7 +114,7 @@ export default function Home(){
               onChange={(e)=>setschquery(e.target.value)}
           />
         </Box>
-        <Stack width='800px' height='300px' spacing={2} overflow='auto'>
+        <Stack width='800px' height='300px' spacing={2} overflow='auto' borderRadius='10px'>
           {filteredinventory.map(({name,quantity})=>(
             <Box key={name} width='100%' minHeight='150px' display='flex' alignItems='center' justifyContent='space-between' bgcolor='#f0f0f0' padding={5}>
               <Typography variant='h3' color='#333' textAlign='center'>
