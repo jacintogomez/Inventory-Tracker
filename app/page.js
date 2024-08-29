@@ -99,7 +99,7 @@ export default function Home(){
           </Stack>
         </Box>
       </Modal>
-      <Box width='100%' display='flex' justifyContent='space-around' alignItems='center'>
+      <Box width='800px' display='flex' justifyContent='space-between' alignItems='center'>
         <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
         <Button variant='contained' onClick={()=>router.push('/inventory')}>Full Inventory List</Button>
       </Box>
