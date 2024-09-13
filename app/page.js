@@ -102,6 +102,7 @@ export default function Home(){
       <Box width='800px' display='flex' justifyContent='space-between' alignItems='center'>
         <Button variant='contained' onClick={()=>{handleopen();}}>Add New Item</Button>
         <Button variant='contained' onClick={()=>router.push('/inventory')}>Full Inventory List</Button>
+        <Button variant='contained' onClick={()=>router.push('/camera')}>Add Via Camera Feed</Button>
       </Box>
       <Box border='1px solid #333' borderRadius='10px'>
         <Box width='800px' height='100px' bgcolor='#ADD8E6' display='flex' justifyContent='space-around' alignItems='center' borderRadius='10px'>
