@@ -2,7 +2,6 @@
 import React,{useState,useRef} from 'react';
 import {Camera} from 'react-camera-pro';
 import {Box, Button, Container, Paper, Typography} from "@mui/material";
-import GenerateSugg from '../utils/vision.js';
 import {OpenAI} from 'openai';
 
 export default function CameraPage(){
