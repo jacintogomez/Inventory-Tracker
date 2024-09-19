@@ -1,13 +1,23 @@
 'use client';
 import React,{useState,useRef} from 'react';
 import {Camera} from 'react-camera-pro';
-import {Box, Button, Container, Paper, Typography} from "@mui/material";
+import {Box, Button, Container, Modal, Paper, Typography} from "@mui/material";
 import {OpenAI} from 'openai';
 
 export default function CameraPage(){
     const camera=useRef(null);
     const [image,setimage]=useState(null);
     const [sug,setsug]=useState('Nothing');
+    const [open,setopen]=useState(false);
+
+    const handleopen=()=>setopen(true);
+    const handleclose=()=>setopen(false);
+    const addandclose=async ()=>{
+        const {addItem}=await import('../page');
+        addItem(sug);
+        handleclose();
+    }
+
     const styles={
         camcontainer:{
             width:'300px',
@@ -64,6 +74,19 @@ export default function CameraPage(){
 
     return (
         <Container maxWidth='50vw'>
+            <Modal open={open} onClose={handleclose}>
+                <Box sx={{p:4,bgcolor:'background.paper'}}>
+                    <Typography variant='h4'>
+                        Add {sug} to your inventory?
+                    </Typography>
+                    <Button variant='contained' onClick={addandclose}>
+                        Yes
+                    </Button>
+                    <Button variant='contained' onClick={handleclose}>
+                        Retake
+                    </Button>
+                </Box>
+            </Modal>
             <Paper elevation={3} sx={{p:2,mt:2}}>
                 <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
                     <div style={styles.camcontainer}>
@@ -71,7 +94,7 @@ export default function CameraPage(){
                     </div>
                     <Box display='flex'>
                         <Button variant='contained' onClick={()=>setimage(camera.current.takePhoto())} sx={{m:2}}>Take Photo</Button>
-                        <Button variant='contained' onClick={GenerateSugg} sx={{m:2}}>Generate</Button>
+                        <Button variant='contained' onClick={()=>{GenerateSugg();handleopen();}} sx={{m:2}}>Generate</Button>
                     </Box>
                     {image&&(
                         <Box sx={{mt:2,width:'100%',maxWidth:'300px'}}>
