@@ -3,17 +3,55 @@ import React,{useState,useRef} from 'react';
 import {Camera} from 'react-camera-pro';
 import {Box, Button, Container, Modal, Paper, Typography} from "@mui/material";
 import {OpenAI} from 'openai';
+import {collection, deleteDoc, doc, getDoc, getDocs, query, setDoc} from "firebase/firestore";
+import {firestore} from "@/firebase";
 
 export default function CameraPage(){
     const camera=useRef(null);
     const [image,setimage]=useState(null);
     const [sug,setsug]=useState('Nothing');
     const [open,setopen]=useState(false);
+    const [inventory,setinventory]=useState([]);
+
+    const updateInventory=async()=>{
+        const snapshot=query(collection(firestore,'pantry'));
+        const docs=await getDocs(snapshot);
+        const inventorylist=[];
+        docs.forEach((doc)=>{
+            inventorylist.push({
+                name: doc.id,
+                ...doc.data(),
+            });
+        });
+        setinventory(inventorylist);
+    }
+
+    const addItem=async(item)=>{
+        const docref=doc(collection(firestore,'pantry'),item);
+        const docsnap=await getDoc(docref);
+        if(docsnap.exists()){
+            const {quantity}=docsnap.data();
+            await setDoc(docref,{quantity:quantity+1});
+        }else{
+            await setDoc(docref,{quantity:1})
+        }
+        await updateInventory();
+    }
+
+    const removeItem=async(item)=>{
+        const docref=doc(collection(firestore,'pantry'),item);
+        const docsnap=await getDoc(docref);
+        if(docsnap.exists()){
+            const {quantity}=docsnap.data();
+            if(quantity===1){await deleteDoc(docref);}
+            else{await setDoc(docref,{quantity:quantity-1});}
+        }
+        await updateInventory();
+    }
 
     const handleopen=()=>setopen(true);
     const handleclose=()=>setopen(false);
     const addandclose=async ()=>{
-        const {addItem}=await import('../page');
         addItem(sug);
         handleclose();
     }
