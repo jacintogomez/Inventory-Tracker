@@ -5,6 +5,7 @@ import {Box, Button, Container, Modal, Paper, Typography} from "@mui/material";
 import {OpenAI} from 'openai';
 import {collection, deleteDoc, doc, getDoc, getDocs, query, setDoc} from "firebase/firestore";
 import {firestore} from "@/firebase";
+import {Oval} from 'react-loader-spinner';
 
 export default function CameraPage(){
     const camera=useRef(null);
@@ -12,6 +13,7 @@ export default function CameraPage(){
     const [sug,setsug]=useState('Nothing');
     const [open,setopen]=useState(false);
     const [inventory,setinventory]=useState([]);
+    const [loading,setloading]=useState(false);
 
     const updateInventory=async()=>{
         const snapshot=query(collection(firestore,'pantry'));
@@ -80,6 +82,7 @@ export default function CameraPage(){
     };
 
     const GenerateSugg=async ()=>{
+        setloading(true);
         console.log('starting...');
         const openai=new OpenAI({
             apiKey:process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -108,6 +111,7 @@ export default function CameraPage(){
         });
         console.log(response.choices[0].message.content);
         setsug(response.choices[0].message.content);
+        setloading(false);
     }
 
     return (
@@ -126,11 +130,11 @@ export default function CameraPage(){
                 </Box>
             </Modal>
             <Paper elevation={3} sx={{p:2,mt:2}}>
-                <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
+                <Box display='flex' alignItems='center' justifyContent='center'>
                     <div style={styles.camcontainer}>
                         <Camera errorMessages={{noCameraAccessible:'No camera device'}} ref={camera} style={styles.camera}/>
                     </div>
-                    <Box display='flex'>
+                    <Box display='flex' flexDirection='column'>
                         <Button variant='contained' onClick={()=>setimage(camera.current.takePhoto())} sx={{m:2}}>Take Photo</Button>
                         <Button variant='contained' onClick={()=>{GenerateSugg();handleopen();}} sx={{m:2}}>Generate</Button>
                     </Box>
@@ -140,7 +144,13 @@ export default function CameraPage(){
                         </Box>
                     )}
                 </Box>
-                <Typography variant='h3'>{sug}</Typography>
+                {loading?(
+                    <Box display='flex' justifyContent='center' sx={{mt:2}}>
+                        <Oval height={80} width={80} color='#00BFFF' ariaLabel='loading'></Oval>
+                    </Box>
+                ):(
+                    <Typography variant='h3'>{sug}</Typography>
+                )}
             </Paper>
         </Container>
     )
