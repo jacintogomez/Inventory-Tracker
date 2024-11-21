@@ -112,6 +112,7 @@ export default function CameraPage(){
         console.log(response.choices[0].message.content);
         setsug(response.choices[0].message.content);
         setloading(false);
+        handleopen();
     }
 
     return (
@@ -136,7 +137,7 @@ export default function CameraPage(){
                     </div>
                     <Box display='flex' flexDirection='column'>
                         <Button variant='contained' onClick={()=>setimage(camera.current.takePhoto())} sx={{m:2}}>Take Photo</Button>
-                        <Button variant='contained' onClick={()=>{GenerateSugg();handleopen();}} sx={{m:2}}>Generate</Button>
+                        <Button variant='contained' onClick={()=>{GenerateSugg();}} sx={{m:2}}>Generate</Button>
                     </Box>
                     {image&&(
                         <Box sx={{mt:2,width:'100%',maxWidth:'300px'}}>
